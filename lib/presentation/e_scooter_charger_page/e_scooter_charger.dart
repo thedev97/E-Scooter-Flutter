@@ -1,4 +1,5 @@
 import 'package:e_scooter/core/utils/e_scooter_helper.dart';
+import 'package:e_scooter/core/utils/e_scooter_maps.dart';
 import 'package:flutter/material.dart';
 import '../../../core/e_scooter_export.dart';
 import 'controller/e_scooter_charger_controller.dart';
@@ -24,9 +25,10 @@ class EScooterCharger extends StatelessWidget {
                   _scooterImgDisplay(),
                 ],
               ),
-              _buildChargingStations(controller),
               _buildBattery(),
               _buildMaps(),
+              _buildChargingStations(controller),
+              SizedBox(height: 20),
               _recentRide(),
               _features()
             ],
@@ -166,30 +168,33 @@ class EScooterCharger extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Charging Stations',
               style: EScooterTextStyles.displayLarge.copyWith(fontSize: 20)),
-          /*SizedBox(
-            height: Get.height * 0.5,
-            width: Get.width,
-            child: GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(
-                  37.43296265331129,
-                  -122.08832357078792,
-                ),
-                zoom: 14.4746,
+          SizedBox(height: 10),
+          ChargingStationsMap(
+            latitude: 20.2290,
+            longitude: 85.8141,
+            markers: Set<Marker>.of([
+              Marker(
+                markerId: MarkerId('Sundarpda'),
+                position: LatLng(20.2290, 85.8141),
+                infoWindow: InfoWindow(title: 'Sundarpada'),
               ),
-              onMapCreated: (GoogleMapController mapController) {
-                controller.googleMapController.complete(mapController);
-              },
-              zoomControlsEnabled: false,
-              zoomGesturesEnabled: false,
-              myLocationButtonEnabled: false,
-              myLocationEnabled: false,
-            ),
-          ),*/
+            ]),
+            polyLines: {
+              Polyline(
+                polylineId: PolylineId('Distance'),
+                color: Color(0xff16AB51).withOpacity(0.8),
+                width: 10,
+                points: [
+                  LatLng(20.2290, 85.8141),
+                  LatLng(20.237900, 85.814705),
+                ],
+              ),
+            },
+          ),
         ],
       ),
     );
@@ -523,7 +528,8 @@ class EScooterCharger extends StatelessWidget {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5, left: 5),
-                      child: Icon(Icons.arrow_forward, size: 25, color: Colors.white),
+                      child: Icon(Icons.arrow_forward,
+                          size: 25, color: Colors.white),
                     )
                   ],
                 )
